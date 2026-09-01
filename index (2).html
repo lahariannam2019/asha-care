@@ -1,0 +1,2598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASHA Care - Pregnancy Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF6B9D;
+            --primary-dark: #E85A8A;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --bg-light: #FFF8F3;
+            --bg-white: #FFFFFF;
+            --text-dark: #2C3E50;
+            --text-muted: #7F8C8D;
+            --success: #52D681;
+            --warning: #FFA62B;
+            --danger: #FF5757;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.12);
+            --shadow-lg: 0 16px 48px rgba(0,0,0,0.15);
+            --gradient-primary: linear-gradient(135deg, #FF6B9D 0%, #FFB6C1 100%);
+            --gradient-secondary: linear-gradient(135deg, #4ECDC4 0%, #72EFE8 100%);
+            --gradient-accent: linear-gradient(135deg, #FFE66D 0%, #FFED9A 100%);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #FFF8F3 0%, #FFE8E8 50%, #E8F5F4 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Landing Page Styles */
+        .landing-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .landing-content {
+            text-align: center;
+            max-width: 600px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .landing-logo {
+            width: 150px;
+            height: 150px;
+            background: var(--gradient-primary);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            margin: 0 auto 30px;
+            box-shadow: var(--shadow-lg);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .landing-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .landing-subtitle {
+            font-size: 20px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .worker-info {
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .worker-info h3 {
+            font-size: 18px;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        .worker-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            text-align: left;
+        }
+
+        .worker-detail {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .worker-detail strong {
+            color: var(--text-dark);
+        }
+
+        .start-button {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 20px 60px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .start-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.4);
+        }
+
+        /* Main App - Hidden by default */
+        .main-app {
+            display: none;
+        }
+
+        .main-app.active {
+            display: block;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-white);
+            padding: 20px 0;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .language-selector {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid var(--primary);
+            background: var(--bg-white);
+            color: var(--primary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .language-selector:hover {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--gradient-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Main Content */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr 350px;
+            gap: 30px;
+            margin-top: 30px;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .voice-control {
+            text-align: center;
+        }
+
+        .voice-button {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            font-size: 48px;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .voice-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.4);
+        }
+
+        .voice-button.active {
+            animation: voicePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes voicePulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(255, 107, 157, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 30px rgba(255, 107, 157, 0);
+            }
+        }
+
+        .voice-status {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        .quick-actions {
+            animation: fadeIn 0.6s ease-out 0.4s both;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+        }
+
+        .action-btn:hover {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .action-icon {
+            font-size: 20px;
+        }
+
+        /* Tasks Sidebar */
+        .tasks-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .task-section {
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .task-section h3 {
+            font-size: 18px;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-item {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .task-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .task-item.urgent {
+            border-left-color: var(--danger);
+        }
+
+        .task-item.due-soon {
+            border-left-color: var(--warning);
+        }
+
+        .task-item.normal {
+            border-left-color: var(--success);
+        }
+
+        .task-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .task-details {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .task-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .search-bar {
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 20px 25px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: var(--text-dark);
+            background: transparent;
+        }
+
+        .search-icon {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-white);
+            border-radius: 20px;
+            margin-top: 10px;
+            box-shadow: var(--shadow-lg);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-result-item {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--bg-light);
+            transition: all 0.3s ease;
+        }
+
+        .search-result-item:hover {
+            background: var(--bg-light);
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* Patient List */
+        .patient-section {
+            animation: fadeIn 0.6s ease-out 0.7s both;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .patient-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .patient-card {
+            background: var(--bg-white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            display: grid;
+            grid-template-columns: 60px 1fr auto;
+            gap: 20px;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .patient-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateX(5px);
+        }
+
+        .patient-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .patient-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .patient-details {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .status-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.due-soon {
+            background: rgba(255, 166, 43, 0.15);
+            color: var(--warning);
+        }
+
+        .status-badge.healthy {
+            background: rgba(82, 214, 129, 0.15);
+            color: var(--success);
+        }
+
+        .status-badge.urgent {
+            background: rgba(255, 87, 87, 0.15);
+            color: var(--danger);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-white);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .modal-content.large {
+            max-width: 900px;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .close-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--danger);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--bg-light);
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .delete-btn {
+            background: var(--danger);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .delete-btn:hover {
+            opacity: 0.8;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .info-item {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 18px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        /* Total Patients View */
+        .patients-view-selector {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .view-option {
+            flex: 1;
+            padding: 40px;
+            background: var(--bg-white);
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        .view-option:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .view-option.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .view-option-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .view-option-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .view-option-count {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        /* Report View */
+        .report-container {
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .report-section {
+            margin-bottom: 30px;
+        }
+
+        .report-section h3 {
+            font-size: 18px;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--bg-light);
+        }
+
+        .report-item {
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .report-label {
+            color: var(--text-muted);
+        }
+
+        .report-value {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tasks-sidebar {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .landing-title {
+                font-size: 36px;
+            }
+
+            .worker-details {
+                grid-template-columns: 1fr;
+            }
+
+            .patient-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .patients-view-selector {
+                flex-direction: column;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 107, 157, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Landing Page -->
+    <div class="landing-page" id="landingPage">
+        <div class="landing-content">
+            <div class="landing-logo">💝</div>
+            <h1 class="landing-title">ASHA Care</h1>
+            <p class="landing-subtitle" id="landingSubtitle">Pregnancy Management System</p>
+           
+            <button class="start-button" onclick="startApp()" id="startButton">
+                <span id="startButtonText">Start Working</span>
+                <span>→</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="main-app" id="mainApp">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">💝</div>
+                    <div class="logo-text">
+                        <h1 id="headerTitle">ASHA Care</h1>
+                        <p id="headerSubtitle">Pregnancy Management System</p>
+                    </div>
+                </div>
+                <div class="user-info">
+                    <select class="language-selector" id="languageSelect" onchange="changeLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="te">తెలుగు</option>
+                    </select>
+                    <div class="user-avatar" id="userAvatar">AW</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Container -->
+        <div class="container">
+            <div class="main-grid">
+                <!-- Left Sidebar - Voice & Actions -->
+                <aside class="sidebar">
+                    <!-- Voice Control -->
+                    <div class="card voice-control">
+                        <h3 style="margin-bottom: 10px; color: var(--text-dark);" id="voiceAssistantTitle">Voice Assistant</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;" id="voiceAssistantSubtitle">Speak in Telugu, Hindi or English</p>
+                        <button class="voice-button" id="voiceBtn">🎤</button>
+                        <div class="voice-status" id="voiceStatus">Tap to speak</div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="card quick-actions">
+                        <h3 style="margin-bottom: 15px; color: var(--text-dark);" id="quickActionsTitle">Quick Actions</h3>
+                        <button class="action-btn" onclick="openRegisterModal()">
+                            <span class="action-icon">➕</span>
+                            <span id="registerNewBtn">Register New Patient</span>
+                        </button>
+                        <button class="action-btn" onclick="openScheduleModal()">
+                            <span class="action-icon">📅</span>
+                            <span id="scheduleCheckupBtn">Schedule Checkup</span>
+                        </button>
+                        <button class="action-btn" onclick="openVaccinationModal()">
+                            <span class="action-icon">💉</span>
+                            <span id="recordVaccinationBtn">Record Vaccination</span>
+                        </button>
+                        <button class="action-btn" onclick="openReportModal()">
+                            <span class="action-icon">📊</span>
+                            <span id="generateReportBtn">Generate Report</span>
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="main-content">
+                    <!-- Search Bar -->
+                    <div class="search-bar">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" placeholder="Search patients by name, ID, or village..." id="searchInput">
+                        <div class="search-results" id="searchResults"></div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card" onclick="openTotalPatientsView()">
+                            <div class="stat-header">
+                                <span class="stat-title" id="totalPatientsLabel">Total Patients</span>
+                                <div class="stat-icon" style="background: rgba(255, 107, 157, 0.15); color: var(--primary);">👥</div>
+                            </div>
+                            <div class="stat-value" id="totalPatients">0</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title" id="dueThisWeekLabel">Due This Week</span>
+                                <div class="stat-icon" style="background: rgba(255, 166, 43, 0.15); color: var(--warning);">⏰</div>
+                            </div>
+                            <div class="stat-value" id="dueThisWeek">0</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title" id="vaccinationsDoneLabel">Vaccinations Done</span>
+                                <div class="stat-icon" style="background: rgba(82, 214, 129, 0.15); color: var(--success);">💉</div>
+                            </div>
+                            <div class="stat-value" id="vaccinationsDone">0</div>
+                        </div>
+
+                        <div class="stat-card" onclick="filterHighRiskPatients()">
+                            <div class="stat-header">
+                                <span class="stat-title" id="highRiskCasesLabel">High Risk Cases</span>
+                                <div class="stat-icon" style="background: rgba(255, 87, 87, 0.15); color: var(--danger);">⚠️</div>
+                            </div>
+                            <div class="stat-value" id="highRiskCases">0</div>
+                        </div>
+                    </div>
+                </main>
+
+                <!-- Right Sidebar - Tasks -->
+                <aside class="tasks-sidebar">
+                    <!-- Today's Tasks -->
+                    <div class="task-section">
+                        <h3 id="todaysTasksTitle">📅 Today's Tasks</h3>
+                        <div id="todaysTasks"></div>
+                    </div>
+
+                    <!-- Tomorrow's Tasks -->
+                    <div class="task-section">
+                        <h3 id="tomorrowsTasksTitle">🔜 Tomorrow's Tasks</h3>
+                        <div id="tomorrowsTasks"></div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Patients Modal -->
+    <div class="modal" id="totalPatientsModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 class="modal-title" id="totalPatientsModalTitle">All Patients</h2>
+                <button class="close-btn" onclick="closeModal('totalPatientsModal')">✕</button>
+            </div>
+           
+            <div class="patients-view-selector">
+                <div class="view-option active" id="activeView" onclick="switchView('active')">
+                    <div class="view-option-icon">👥</div>
+                    <div class="view-option-title" id="activeViewTitle">Active Patients</div>
+                    <div class="view-option-count" id="activeCount">0</div>
+                </div>
+                <div class="view-option" id="archivedView" onclick="switchView('archived')">
+                    <div class="view-option-icon">📁</div>
+                    <div class="view-option-title" id="archivedViewTitle">Old Records</div>
+                    <div class="view-option-count" id="archivedCount">0</div>
+                </div>
+            </div>
+
+            <div class="patient-list" id="modalPatientList"></div>
+        </div>
+    </div>
+
+    <!-- Patient Details Modal -->
+    <div class="modal" id="patientModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalPatientName">Patient Details</h2>
+                <button class="close-btn" onclick="closeModal('patientModal')">✕</button>
+            </div>
+            <div class="info-grid" id="patientDetailsGrid"></div>
+            <button class="delete-btn" id="deletePatientBtn" onclick="deletePatient()">Delete Patient Record</button>
+        </div>
+    </div>
+
+    <!-- Register Patient Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="registerModalTitle">Register New Patient</h2>
+                <button class="close-btn" onclick="closeModal('registerModal')">✕</button>
+            </div>
+            <form id="registerForm" onsubmit="registerPatient(event)">
+                <div class="form-group">
+                    <label class="form-label" id="patientNameLabel">Patient Name *</label>
+                    <input type="text" class="form-input" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="ageLabel">Age *</label>
+                    <input type="number" class="form-input" name="age" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="villageLabel">Village *</label>
+                    <input type="text" class="form-input" name="village" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="contactNumberLabel">Contact Number *</label>
+                    <input type="tel" class="form-input" name="contact" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="deliveryDateLabel">Expected Delivery Date *</label>
+                    <input type="date" class="form-input" name="deliveryDate" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="pregnancyWeekLabel">Current Week of Pregnancy *</label>
+                    <input type="number" class="form-input" name="week" min="1" max="42" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="bloodGroupLabel">Blood Group</label>
+                    <select class="form-select" name="bloodGroup">
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="riskLevelLabel">Risk Level</label>
+                    <select class="form-select" name="riskLevel" onchange="toggleRiskReason(this.value)">
+                        <option value="normal">Normal</option>
+                        <option value="moderate">Moderate</option>
+                        <option value="high">High Risk</option>
+                    </select>
+                </div>
+                <div class="form-group" id="riskReasonGroup" style="display: none;">
+                    <label class="form-label" id="riskReasonLabel">Risk Reason *</label>
+                    <input type="text" class="form-input" name="riskReason" id="riskReasonInput">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="notesLabel">Notes</label>
+                    <textarea class="form-textarea" name="notes" rows="3"></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="registerSubmitBtn">Register Patient</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Schedule Checkup Modal -->
+    <div class="modal" id="scheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="scheduleModalTitle">Schedule Checkup</h2>
+                <button class="close-btn" onclick="closeModal('scheduleModal')">✕</button>
+            </div>
+            <form id="scheduleForm" onsubmit="scheduleCheckup(event)">
+                <div class="form-group">
+                    <label class="form-label" id="selectPatientLabel">Select Patient *</label>
+                    <select class="form-select" name="patientId" id="schedulePatientSelect" required>
+                        <option value="">Select a patient...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="checkupDateLabel">Checkup Date *</label>
+                    <input type="datetime-local" class="form-input" name="checkupDate" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="checkupTypeLabel">Type of Checkup</label>
+                    <select class="form-select" name="checkupType">
+                        <option value="routine" id="routineOption">Routine Checkup</option>
+                        <option value="ultrasound" id="ultrasoundOption">Ultrasound</option>
+                        <option value="blood-test" id="bloodTestOption">Blood Test</option>
+                        <option value="emergency" id="emergencyOption">Emergency</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="checkupNotesLabel">Notes</label>
+                    <textarea class="form-textarea" name="notes" rows="3"></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="scheduleSubmitBtn">Schedule Checkup</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Vaccination Modal -->
+    <div class="modal" id="vaccinationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="vaccinationModalTitle">Record Vaccination</h2>
+                <button class="close-btn" onclick="closeModal('vaccinationModal')">✕</button>
+            </div>
+            <form id="vaccinationForm" onsubmit="recordVaccination(event)">
+                <div class="form-group">
+                    <label class="form-label" id="vaccinationPatientLabel">Select Patient *</label>
+                    <select class="form-select" name="patientId" id="vaccinationPatientSelect" required>
+                        <option value="">Select a patient...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="vaccineTypeLabel">Vaccine Type *</label>
+                    <select class="form-select" name="vaccineType" required>
+                        <option value="TT1">TT1 (First Dose)</option>
+                        <option value="TT2">TT2 (Second Dose)</option>
+                        <option value="TT-Booster">TT Booster</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="vaccinationDateLabel">Date Administered *</label>
+                    <input type="datetime-local" class="form-input" name="vaccinationDate" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="vaccinationNotesLabel">Notes</label>
+                    <textarea class="form-textarea" name="notes" rows="3"></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="vaccinationSubmitBtn">Record Vaccination</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="modal" id="reportModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 class="modal-title" id="reportModalTitle">Patient Report</h2>
+                <button class="close-btn" onclick="closeModal('reportModal')">✕</button>
+            </div>
+           
+            <div class="form-group">
+                <label class="form-label" id="searchPatientLabel">Search Patient</label>
+                <input type="text" class="form-input" id="reportSearchInput" placeholder="Type patient name..." oninput="searchPatientForReport(this.value)">
+                <div class="search-results" id="reportSearchResults"></div>
+            </div>
+
+            <div id="reportContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== TRANSLATION SYSTEM ====================
+       
+        const translations = {
+            en: {
+                // Landing page
+                landingSubtitle: "Pregnancy Management System",
+                workerInfoTitle: "👩‍⚕️ ASHA Worker Information",
+                nameLabel: "Name:",
+                idLabel: "ID:",
+                areaLabel: "Area:",
+                contactLabel: "Contact:",
+                startButtonText: "Start Working",
+               
+                // Header
+                headerTitle: "ASHA Care",
+                headerSubtitle: "Pregnancy Management System",
+               
+                // Voice assistant
+                voiceAssistantTitle: "Voice Assistant",
+                voiceAssistantSubtitle: "Speak in Telugu, Hindi or English",
+                tapToSpeak: "Tap to speak",
+                listening: "Listening...",
+               
+                // Quick actions
+                quickActionsTitle: "Quick Actions",
+                registerNewBtn: "Register New Patient",
+                scheduleCheckupBtn: "Schedule Checkup",
+                recordVaccinationBtn: "Record Vaccination",
+                generateReportBtn: "Generate Report",
+               
+                // Stats
+                totalPatientsLabel: "Total Patients",
+                dueThisWeekLabel: "Due This Week",
+                vaccinationsDoneLabel: "Vaccinations Done",
+                highRiskCasesLabel: "High Risk Cases",
+               
+                // Tasks
+                todaysTasksTitle: "📅 Today's Tasks",
+                tomorrowsTasksTitle: "🔜 Tomorrow's Tasks",
+               
+                // Total patients modal
+                totalPatientsModalTitle: "All Patients",
+                activeViewTitle: "Active Patients",
+                archivedViewTitle: "Old Records",
+               
+                // Register modal
+                registerModalTitle: "Register New Patient",
+                patientNameLabel: "Patient Name *",
+                ageLabel: "Age *",
+                villageLabel: "Village *",
+                contactNumberLabel: "Contact Number *",
+                deliveryDateLabel: "Expected Delivery Date *",
+                pregnancyWeekLabel: "Current Week of Pregnancy *",
+                bloodGroupLabel: "Blood Group",
+                riskLevelLabel: "Risk Level",
+                riskReasonLabel: "Risk Reason *",
+                notesLabel: "Notes",
+                registerSubmitBtn: "Register Patient",
+               
+                // Schedule modal
+                scheduleModalTitle: "Schedule Checkup",
+                selectPatientLabel: "Select Patient *",
+                checkupDateLabel: "Checkup Date *",
+                checkupTypeLabel: "Type of Checkup",
+                routineOption: "Routine Checkup",
+                ultrasoundOption: "Ultrasound",
+                bloodTestOption: "Blood Test",
+                emergencyOption: "Emergency",
+                checkupNotesLabel: "Notes",
+                scheduleSubmitBtn: "Schedule Checkup",
+               
+                // Vaccination modal
+                vaccinationModalTitle: "Record Vaccination",
+                vaccinationPatientLabel: "Select Patient *",
+                vaccineTypeLabel: "Vaccine Type *",
+                vaccinationDateLabel: "Date Administered *",
+                vaccinationNotesLabel: "Notes",
+                vaccinationSubmitBtn: "Record Vaccination",
+               
+                // Report modal
+                reportModalTitle: "Patient Report",
+                searchPatientLabel: "Search Patient",
+               
+                // Voice commands
+                voiceShowPatients: "Showing patient list",
+                voiceRegister: "Opening registration form",
+                voiceHighRisk: "Showing high risk patients",
+                voiceTasks: "Showing today's tasks",
+                voiceSchedule: "Opening schedule form",
+                voiceVaccination: "Opening vaccination form",
+                voiceReport: "Opening report",
+                voiceNotUnderstood: "Sorry, I did not understand that command",
+               
+                // Messages
+                patientRegistered: "Patient registered successfully!",
+                checkupScheduled: "Checkup scheduled successfully!",
+                vaccinationRecorded: "Vaccination recorded successfully!",
+                patientDeleted: "Patient record moved to old records",
+                deletePatientBtn: "Delete Patient Record",
+                confirmDelete: "Are you sure you want to move this patient to old records?",
+               
+                // Search
+                searchPlaceholder: "Search patients by name, ID, or village...",
+                noResults: "No patients found",
+                noTasks: "No tasks scheduled"
+            },
+            hi: {
+                // Landing page
+                landingSubtitle: "गर्भावस्था प्रबंधन प्रणाली",
+                workerInfoTitle: "👩‍⚕️ आशा कार्यकर्ता जानकारी",
+                nameLabel: "नाम:",
+                idLabel: "आईडी:",
+                areaLabel: "क्षेत्र:",
+                contactLabel: "संपर्क:",
+                startButtonText: "कार्य शुरू करें",
+               
+                // Header
+                headerTitle: "आशा केयर",
+                headerSubtitle: "गर्भावस्था प्रबंधन प्रणाली",
+               
+                // Voice assistant
+                voiceAssistantTitle: "आवाज सहायक",
+                voiceAssistantSubtitle: "तेलुगु, हिंदी या अंग्रेजी में बोलें",
+                tapToSpeak: "बोलने के लिए टैप करें",
+                listening: "सुन रहे हैं...",
+               
+                // Quick actions
+                quickActionsTitle: "त्वरित क्रियाएं",
+                registerNewBtn: "नया रोगी पंजीकृत करें",
+                scheduleCheckupBtn: "जांच निर्धारित करें",
+                recordVaccinationBtn: "टीकाकरण रिकॉर्ड करें",
+                generateReportBtn: "रिपोर्ट बनाएं",
+               
+                // Stats
+                totalPatientsLabel: "कुल रोगी",
+                dueThisWeekLabel: "इस सप्ताह देय",
+                vaccinationsDoneLabel: "टीकाकरण पूर्ण",
+                highRiskCasesLabel: "उच्च जोखिम मामले",
+               
+                // Tasks
+                todaysTasksTitle: "📅 आज के कार्य",
+                tomorrowsTasksTitle: "🔜 कल के कार्य",
+               
+                // Total patients modal
+                totalPatientsModalTitle: "सभी रोगी",
+                activeViewTitle: "सक्रिय रोगी",
+                archivedViewTitle: "पुराने रिकॉर्ड",
+               
+                // Register modal
+                registerModalTitle: "नया रोगी पंजीकृत करें",
+                patientNameLabel: "रोगी का नाम *",
+                ageLabel: "आयु *",
+                villageLabel: "गांव *",
+                contactNumberLabel: "संपर्क नंबर *",
+                deliveryDateLabel: "प्रत्याशित प्रसव तिथि *",
+                pregnancyWeekLabel: "गर्भावस्था का वर्तमान सप्ताह *",
+                bloodGroupLabel: "रक्त समूह",
+                riskLevelLabel: "जोखिम स्तर",
+                riskReasonLabel: "जोखिम कारण *",
+                notesLabel: "नोट्स",
+                registerSubmitBtn: "रोगी पंजीकृत करें",
+               
+                // Schedule modal
+                scheduleModalTitle: "जांच निर्धारित करें",
+                selectPatientLabel: "रोगी चुनें *",
+                checkupDateLabel: "जांच तिथि *",
+                checkupTypeLabel: "जांच का प्रकार",
+                routineOption: "नियमित जांच",
+                ultrasoundOption: "अल्ट्रासाउंड",
+                bloodTestOption: "रक्त परीक्षण",
+                emergencyOption: "आपातकाल",
+                checkupNotesLabel: "नोट्स",
+                scheduleSubmitBtn: "जांच निर्धारित करें",
+               
+                // Vaccination modal
+                vaccinationModalTitle: "टीकाकरण रिकॉर्ड करें",
+                vaccinationPatientLabel: "रोगी चुनें *",
+                vaccineTypeLabel: "टीका प्रकार *",
+                vaccinationDateLabel: "दी गई तिथि *",
+                vaccinationNotesLabel: "नोट्स",
+                vaccinationSubmitBtn: "टीकाकरण रिकॉर्ड करें",
+               
+                // Report modal
+                reportModalTitle: "रोगी रिपोर्ट",
+                searchPatientLabel: "रोगी खोजें",
+               
+                // Voice commands
+                voiceShowPatients: "रोगियों की सूची दिखा रहा हूँ",
+                voiceRegister: "पंजीकरण फॉर्म खोल रहा हूँ",
+                voiceHighRisk: "उच्च जोखिम रोगी दिखा रहा हूँ",
+                voiceTasks: "आज के कार्य दिखा रहा हूँ",
+                voiceSchedule: "जांच फॉर्म खोल रहा हूँ",
+                voiceVaccination: "टीकाकरण फॉर्म खोल रहा हूँ",
+                voiceReport: "रिपोर्ट खोल रहा हूँ",
+                voiceNotUnderstood: "क्षमा करें, मैं वह आदेश नहीं समझ पाया",
+               
+                // Messages
+                patientRegistered: "रोगी सफलतापूर्वक पंजीकृत!",
+                checkupScheduled: "जांच सफलतापूर्वक निर्धारित!",
+                vaccinationRecorded: "टीकाकरण सफलतापूर्वक रिकॉर्ड किया गया!",
+                patientDeleted: "रोगी रिकॉर्ड पुराने रिकॉर्ड में स्थानांतरित",
+                deletePatientBtn: "रोगी रिकॉर्ड हटाएं",
+                confirmDelete: "क्या आप इस रोगी को पुराने रिकॉर्ड में स्थानांतरित करना चाहते हैं?",
+               
+                // Search
+                searchPlaceholder: "नाम, आईडी या गांव से खोजें...",
+                noResults: "कोई रोगी नहीं मिला",
+                noTasks: "कोई कार्य निर्धारित नहीं"
+            },
+            te: {
+                // Landing page
+                landingSubtitle: "గర్భధారణ నిర్వహణ వ్యవస్థ",
+                workerInfoTitle: "👩‍⚕️ ఆశా వర్కర్ సమాచారం",
+                nameLabel: "పేరు:",
+                idLabel: "ID:",
+                areaLabel: "ప్రాంతం:",
+                contactLabel: "సంప్రదింపు:",
+                startButtonText: "పని ప్రారంభించు",
+               
+                // Header
+                headerTitle: "ఆశా కేర్",
+                headerSubtitle: "గర్భధారణ నిర్వహణ వ్యవస్థ",
+               
+                // Voice assistant
+                voiceAssistantTitle: "వాయిస్ అసిస్టెంట్",
+                voiceAssistantSubtitle: "తెలుగు, హిందీ లేదా ఇంగ్లీష్‌లో మాట్లాడండి",
+                tapToSpeak: "మాట్లాడటానికి నొక్కండి",
+                listening: "వింటున్నాము...",
+               
+                // Quick actions
+                quickActionsTitle: "త్వరిత చర్యలు",
+                registerNewBtn: "కొత్త రోగిని నమోదు చేయండి",
+                scheduleCheckupBtn: "చెకప్ షెడ్యూల్ చేయండి",
+                recordVaccinationBtn: "టీకాను రికార్డ్ చేయండి",
+                generateReportBtn: "నివేదికను రూపొందించండి",
+               
+                // Stats
+                totalPatientsLabel: "మొత్తం రోగులు",
+                dueThisWeekLabel: "ఈ వారం డ్యూ",
+                vaccinationsDoneLabel: "టీకాలు పూర్తయ్యాయి",
+                highRiskCasesLabel: "అధిక ప్రమాద కేసులు",
+               
+                // Tasks
+                todaysTasksTitle: "📅 నేటి పనులు",
+                tomorrowsTasksTitle: "🔜 రేపటి పనులు",
+               
+                // Total patients modal
+                totalPatientsModalTitle: "అన్ని రోగులు",
+                activeViewTitle: "క్రియాశీల రోగులు",
+                archivedViewTitle: "పాత రికార్డులు",
+               
+                // Register modal
+                registerModalTitle: "కొత్త రోగిని నమోదు చేయండి",
+                patientNameLabel: "రోగి పేరు *",
+                ageLabel: "వయస్సు *",
+                villageLabel: "గ్రామం *",
+                contactNumberLabel: "సంప్రదింపు నంబర్ *",
+                deliveryDateLabel: "అంచనా ప్రసవ తేదీ *",
+                pregnancyWeekLabel: "ప్రస్తుత గర్భ వారం *",
+                bloodGroupLabel: "రక్త వర్గం",
+                riskLevelLabel: "ప్రమాద స్థాయి",
+                riskReasonLabel: "ప్రమాద కారణం *",
+                notesLabel: "గమనికలు",
+                registerSubmitBtn: "రోగిని నమోదు చేయండి",
+               
+                // Schedule modal
+                scheduleModalTitle: "చెకప్ షెడ్యూల్ చేయండి",
+                selectPatientLabel: "రోగిని ఎంచుకోండి *",
+                checkupDateLabel: "చెకప్ తేదీ *",
+                checkupTypeLabel: "చెకప్ రకం",
+                routineOption: "సాధారణ చెకప్",
+                ultrasoundOption: "అల్ట్రాసౌండ్",
+                bloodTestOption: "రక్త పరీక్ష",
+                emergencyOption: "అత్యవసరం",
+                checkupNotesLabel: "గమనికలు",
+                scheduleSubmitBtn: "చెకప్ షెడ్యూల్ చేయండి",
+               
+                // Vaccination modal
+                vaccinationModalTitle: "టీకాను రికార్డ్ చేయండి",
+                vaccinationPatientLabel: "రోగిని ఎంచుకోండి *",
+                vaccineTypeLabel: "టీకా రకం *",
+                vaccinationDateLabel: "ఇచ్చిన తేదీ *",
+                vaccinationNotesLabel: "గమనికలు",
+                vaccinationSubmitBtn: "టీకాను రికార్డ్ చేయండి",
+               
+                // Report modal
+                reportModalTitle: "రోగి నివేదిక",
+                searchPatientLabel: "రోగిని శోధించండి",
+               
+                // Voice commands
+                voiceShowPatients: "రోగుల జాబితా చూపిస్తున్నాను",
+                voiceRegister: "నమోదు ఫారమ్ తెరుస్తున్నాను",
+                voiceHighRisk: "అధిక ప్రమాద రోగులను చూపిస్తున్నాను",
+                voiceTasks: "నేటి పనులను చూపిస్తున్నాను",
+                voiceSchedule: "చెకప్ ఫారమ్ తెరుస్తున్నాను",
+                voiceVaccination: "టీకా ఫారమ్ తెరుస్తున్నాను",
+                voiceReport: "నివేదిక తెరుస్తున్నాను",
+                voiceNotUnderstood: "క్షమించండి, ఆ ఆదేశం అర్థం కాలేదు",
+               
+                // Messages
+                patientRegistered: "రోగి విజయవంతంగా నమోదు చేయబడింది!",
+                checkupScheduled: "చెకప్ విజయవంతంగా షెడ్యూల్ చేయబడింది!",
+                vaccinationRecorded: "టీకా విజయవంతంగా రికార్డ్ చేయబడింది!",
+                patientDeleted: "రోగి రికార్డు పాత రికార్డులకు తరలించబడింది",
+                deletePatientBtn: "రోగి రికార్డును తొలగించండి",
+                confirmDelete: "మీరు ఖచ్చితంగా ఈ రోగిని పాత రికార్డులకు తరలించాలనుకుంటున్నారా?",
+               
+                // Search
+                searchPlaceholder: "పేరు, ID లేదా గ్రామం ద్వారా శోధించండి...",
+                noResults: "రోగులు కనుగొనబడలేదు",
+                noTasks: "పనులు షెడ్యూల్ చేయబడలేదు"
+            }
+        };
+
+        let currentLanguage = 'en';
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            const t = translations[lang];
+           
+            // Update all translatable elements
+            Object.keys(t).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = t[key];
+                    } else {
+                        element.textContent = t[key];
+                    }
+                }
+            });
+           
+            // Update select options
+            if (lang === 'hi') {
+                document.querySelector('select[name="riskLevel"]').innerHTML = `
+                    <option value="normal">सामान्य</option>
+                    <option value="moderate">मध्यम</option>
+                    <option value="high">उच्च जोखिम</option>
+                `;
+            } else if (lang === 'te') {
+                document.querySelector('select[name="riskLevel"]').innerHTML = `
+                    <option value="normal">సాధారణ</option>
+                    <option value="moderate">మధ్యస్థ</option>
+                    <option value="high">అధిక ప్రమాదం</option>
+                `;
+            } else {
+                document.querySelector('select[name="riskLevel"]').innerHTML = `
+                    <option value="normal">Normal</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="high">High Risk</option>
+                `;
+            }
+        }
+
+        // ==================== DATABASE & STATE MANAGEMENT ====================
+       
+        class Database {
+            constructor() {
+                this.initializeDB();
+            }
+
+            initializeDB() {
+                if (!localStorage.getItem('ashacare_patients')) {
+                    localStorage.setItem('ashacare_patients', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('ashacare_archived_patients')) {
+                    localStorage.setItem('ashacare_archived_patients', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('ashacare_tasks')) {
+                    localStorage.setItem('ashacare_tasks', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('ashacare_vaccinations')) {
+                    localStorage.setItem('ashacare_vaccinations', JSON.stringify([]));
+                }
+            }
+
+            getPatients() {
+                return JSON.parse(localStorage.getItem('ashacare_patients') || '[]');
+            }
+
+            getArchivedPatients() {
+                return JSON.parse(localStorage.getItem('ashacare_archived_patients') || '[]');
+            }
+
+            savePatient(patient) {
+                const patients = this.getPatients();
+                patient.id = 'P-2024-' + String(patients.length + 1).padStart(4, '0');
+                patient.registeredDate = new Date().toISOString();
+                patient.active = true;
+                patients.push(patient);
+                localStorage.setItem('ashacare_patients', JSON.stringify(patients));
+                return patient;
+            }
+
+            archivePatient(patientId) {
+                const patients = this.getPatients();
+                const index = patients.findIndex(p => p.id === patientId);
+                if (index !== -1) {
+                    const patient = patients.splice(index, 1)[0];
+                    patient.active = false;
+                    patient.archivedDate = new Date().toISOString();
+                   
+                    const archived = this.getArchivedPatients();
+                    archived.push(patient);
+                   
+                    localStorage.setItem('ashacare_patients', JSON.stringify(patients));
+                    localStorage.setItem('ashacare_archived_patients', JSON.stringify(archived));
+                    return true;
+                }
+                return false;
+            }
+
+            getTasks() {
+                return JSON.parse(localStorage.getItem('ashacare_tasks') || '[]');
+            }
+
+            saveTask(task) {
+                const tasks = this.getTasks();
+                task.id = 'T-' + Date.now();
+                task.createdDate = new Date().toISOString();
+                tasks.push(task);
+                localStorage.setItem('ashacare_tasks', JSON.stringify(tasks));
+                return task;
+            }
+
+            getVaccinations() {
+                return JSON.parse(localStorage.getItem('ashacare_vaccinations') || '[]');
+            }
+
+            saveVaccination(vaccination) {
+                const vaccinations = this.getVaccinations();
+                vaccination.id = 'V-' + Date.now();
+                vaccinations.push(vaccination);
+                localStorage.setItem('ashacare_vaccinations', JSON.stringify(vaccinations));
+                return vaccination;
+            }
+        }
+
+        const db = new Database();
+        let currentPatientId = null;
+        let currentView = 'active';
+
+        // ==================== VOICE ASSISTANT ====================
+       
+        let isListening = false;
+        let recognition = null;
+        let synthesis = window.speechSynthesis;
+
+        // Initialize Web Speech API
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+        }
+
+        function setupVoiceAssistant() {
+            const voiceBtn = document.getElementById('voiceBtn');
+            const voiceStatus = document.getElementById('voiceStatus');
+
+            voiceBtn.addEventListener('click', () => {
+                if (!recognition) {
+                    alert('Voice recognition is not supported in your browser. Please use Chrome, Edge, or Safari.');
+                    return;
+                }
+
+                if (isListening) {
+                    stopListening();
+                } else {
+                    startListening();
+                }
+            });
+
+            function startListening() {
+                isListening = true;
+                voiceBtn.classList.add('active');
+                voiceStatus.textContent = translations[currentLanguage].listening;
+
+                // Set language based on current selection
+                const langCodes = { en: 'en-IN', hi: 'hi-IN', te: 'te-IN' };
+                recognition.lang = langCodes[currentLanguage];
+
+                recognition.start();
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    voiceStatus.innerHTML = `🎯 "${transcript}"`;
+                    processVoiceCommand(transcript);
+                };
+
+                recognition.onerror = (event) => {
+                    console.error('Speech recognition error', event.error);
+                    stopListening();
+                    voiceStatus.textContent = 'Error: ' + event.error;
+                };
+
+                recognition.onend = () => {
+                    setTimeout(() => {
+                        stopListening();
+                    }, 2000);
+                };
+            }
+
+            function stopListening() {
+                isListening = false;
+                voiceBtn.classList.remove('active');
+                voiceStatus.textContent = translations[currentLanguage].tapToSpeak;
+                if (recognition) {
+                    recognition.stop();
+                }
+            }
+        }
+
+        function processVoiceCommand(command) {
+            const lowerCommand = command.toLowerCase();
+           
+            // Telugu commands
+            if (lowerCommand.includes('రోగులు') || lowerCommand.includes('చూపించు') || lowerCommand.includes('జాబితా')) {
+                openTotalPatientsView();
+                speak(translations[currentLanguage].voiceShowPatients, currentLanguage);
+            }
+            else if (lowerCommand.includes('నమోదు') || lowerCommand.includes('కొత్త')) {
+                openRegisterModal();
+                speak(translations[currentLanguage].voiceRegister, currentLanguage);
+            }
+            else if (lowerCommand.includes('చెకప్') || lowerCommand.includes('షెడ్యూల్')) {
+                openScheduleModal();
+                speak(translations[currentLanguage].voiceSchedule, currentLanguage);
+            }
+            else if (lowerCommand.includes('టీకా') || lowerCommand.includes('వ్యాక్సిన్')) {
+                openVaccinationModal();
+                speak(translations[currentLanguage].voiceVaccination, currentLanguage);
+            }
+            else if (lowerCommand.includes('నివేదిక') || lowerCommand.includes('రిపోర్ట్')) {
+                openReportModal();
+                speak(translations[currentLanguage].voiceReport, currentLanguage);
+            }
+            else if (lowerCommand.includes('ప్రమాదం') || lowerCommand.includes('అత్యవసరం')) {
+                filterHighRiskPatients();
+                speak(translations[currentLanguage].voiceHighRisk, currentLanguage);
+            }
+            else if (lowerCommand.includes('పనులు') || lowerCommand.includes('టాస్క్')) {
+                scrollToTasks();
+                speak(translations[currentLanguage].voiceTasks, currentLanguage);
+            }
+            // Hindi commands
+            else if (lowerCommand.includes('मरीज') || lowerCommand.includes('रोगी') || lowerCommand.includes('दिखाओ') || lowerCommand.includes('सूची')) {
+                openTotalPatientsView();
+                speak(translations[currentLanguage].voiceShowPatients, currentLanguage);
+            }
+            else if (lowerCommand.includes('पंजीकरण') || lowerCommand.includes('नया') || lowerCommand.includes('नई')) {
+                openRegisterModal();
+                speak(translations[currentLanguage].voiceRegister, currentLanguage);
+            }
+            else if (lowerCommand.includes('जांच') || lowerCommand.includes('चेकअप')) {
+                openScheduleModal();
+                speak(translations[currentLanguage].voiceSchedule, currentLanguage);
+            }
+            else if (lowerCommand.includes('टीका') || lowerCommand.includes('वैक्सीन')) {
+                openVaccinationModal();
+                speak(translations[currentLanguage].voiceVaccination, currentLanguage);
+            }
+            else if (lowerCommand.includes('रिपोर्ट') || lowerCommand.includes('रिपोर्ट')) {
+                openReportModal();
+                speak(translations[currentLanguage].voiceReport, currentLanguage);
+            }
+            else if (lowerCommand.includes('जोखिम') || lowerCommand.includes('खतरा')) {
+                filterHighRiskPatients();
+                speak(translations[currentLanguage].voiceHighRisk, currentLanguage);
+            }
+            else if (lowerCommand.includes('कार्य') || lowerCommand.includes('काम')) {
+                scrollToTasks();
+                speak(translations[currentLanguage].voiceTasks, currentLanguage);
+            }
+            // English commands
+            else if (lowerCommand.includes('show') && (lowerCommand.includes('patient') || lowerCommand.includes('all') || lowerCommand.includes('list'))) {
+                openTotalPatientsView();
+                speak(translations[currentLanguage].voiceShowPatients, currentLanguage);
+            }
+            else if (lowerCommand.includes('register') || lowerCommand.includes('new patient') || lowerCommand.includes('add patient')) {
+                openRegisterModal();
+                speak(translations[currentLanguage].voiceRegister, currentLanguage);
+            }
+            else if (lowerCommand.includes('schedule') || lowerCommand.includes('checkup') || lowerCommand.includes('check up')) {
+                openScheduleModal();
+                speak(translations[currentLanguage].voiceSchedule, currentLanguage);
+            }
+            else if (lowerCommand.includes('vaccination') || lowerCommand.includes('vaccine') || lowerCommand.includes('immunization')) {
+                openVaccinationModal();
+                speak(translations[currentLanguage].voiceVaccination, currentLanguage);
+            }
+            else if (lowerCommand.includes('report') || lowerCommand.includes('generate')) {
+                openReportModal();
+                speak(translations[currentLanguage].voiceReport, currentLanguage);
+            }
+            else if (lowerCommand.includes('high risk') || lowerCommand.includes('urgent') || lowerCommand.includes('emergency')) {
+                filterHighRiskPatients();
+                speak(translations[currentLanguage].voiceHighRisk, currentLanguage);
+            }
+            else if (lowerCommand.includes('tasks') || lowerCommand.includes('today') || lowerCommand.includes('tomorrow')) {
+                scrollToTasks();
+                speak(translations[currentLanguage].voiceTasks, currentLanguage);
+            }
+            else {
+                speak(translations[currentLanguage].voiceNotUnderstood, currentLanguage);
+            }
+        }
+
+        function speak(text, lang = 'en') {
+            if ('speechSynthesis' in window) {
+                synthesis.cancel();
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                const langCodes = { en: 'en-IN', hi: 'hi-IN', te: 'te-IN' };
+                utterance.lang = langCodes[lang];
+                utterance.rate = 0.9;
+                utterance.pitch = 1.2;
+
+                function assignVoiceAndSpeak() {
+                    const voices = synthesis.getVoices();
+                    const langPrefix = langCodes[lang].split('-')[0];
+                    const femaleVoice = voices.find(v =>
+                        v.lang.startsWith(langPrefix) &&
+                        (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman'))
+                    );
+                    if (femaleVoice) {
+                        utterance.voice = femaleVoice;
+                    } else {
+                        const anyVoice = voices.find(v => v.lang.startsWith(langPrefix));
+                        if (anyVoice) utterance.voice = anyVoice;
+                    }
+                    synthesis.speak(utterance);
+                }
+
+                const voices = synthesis.getVoices();
+                if (voices.length > 0) {
+                    assignVoiceAndSpeak();
+                } else {
+                    synthesis.onvoiceschanged = () => {
+                        synthesis.onvoiceschanged = null;
+                        assignVoiceAndSpeak();
+                    };
+                }
+            }
+        }
+
+        function filterHighRiskPatients() {
+            openTotalPatientsView();
+            const patients = db.getPatients();
+            const highRisk = patients.filter(p => p.riskLevel === 'high');
+            renderModalPatients(highRisk);
+        }
+
+        function scrollToTasks() {
+            const tasksSection = document.querySelector('.tasks-sidebar');
+            tasksSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ==================== APP INITIALIZATION ====================
+       
+        function startApp() {
+            document.getElementById('landingPage').style.display = 'none';
+            document.getElementById('mainApp').classList.add('active');
+           
+            // Initialize app
+            setupVoiceAssistant();
+            renderTasks();
+            updateStats();
+            setupSearch();
+           
+            // Load voices for speech synthesis
+            if ('speechSynthesis' in window) {
+                speechSynthesis.onvoiceschanged = () => {
+                    speechSynthesis.getVoices();
+                };
+            }
+        }
+
+        // ==================== PATIENT MANAGEMENT ====================
+       
+        function renderModalPatients(patientsToRender = null) {
+            const patients = patientsToRender || (currentView === 'active' ? db.getPatients() : db.getArchivedPatients());
+            const patientList = document.getElementById('modalPatientList');
+           
+            if (patients.length === 0) {
+                patientList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        <p style="font-size: 18px; margin-bottom: 10px;">📋 ${translations[currentLanguage].noResults}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            patientList.innerHTML = patients.map(patient => {
+                const initials = patient.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                const riskBadge = getRiskBadge(patient.riskLevel || 'normal');
+                const riskInfo = patient.riskLevel === 'high' && patient.riskReason ?
+                    `<span class="detail-item"><span class="detail-icon">⚠️</span>${patient.riskReason}</span>` : '';
+               
+                return `
+                    <div class="patient-card" onclick="showPatientDetails('${patient.id}', ${currentView === 'archived'})">
+                        <div class="patient-avatar">${initials}</div>
+                        <div class="patient-info">
+                            <h3>${patient.name}</h3>
+                            <div class="patient-details">
+                                <span class="detail-item">
+                                    <span class="detail-icon">🆔</span>
+                                    ${patient.id}
+                                </span>
+                                <span class="detail-item">
+                                    <span class="detail-icon">🏘️</span>
+                                    ${patient.village}
+                                </span>
+                                <span class="detail-item">
+                                    <span class="detail-icon">📅</span>
+                                    Due: ${formatDate(patient.deliveryDate)}
+                                </span>
+                                <span class="detail-item">
+                                    <span class="detail-icon">⏱️</span>
+                                    Week ${patient.week}
+                                </span>
+                                ${riskInfo}
+                            </div>
+                        </div>
+                        <div class="patient-actions">
+                            ${riskBadge}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getRiskBadge(riskLevel) {
+            const badges = {
+                normal: '<span class="status-badge healthy">Healthy</span>',
+                moderate: '<span class="status-badge due-soon">Moderate Risk</span>',
+                high: '<span class="status-badge urgent">High Risk</span>'
+            };
+            return badges[riskLevel] || badges.normal;
+        }
+
+        function showPatientDetails(patientId, isArchived = false) {
+            const patients = isArchived ? db.getArchivedPatients() : db.getPatients();
+            const patient = patients.find(p => p.id === patientId);
+           
+            if (!patient) return;
+
+            currentPatientId = patientId;
+            document.getElementById('modalPatientName').textContent = patient.name;
+           
+            const detailsGrid = document.getElementById('patientDetailsGrid');
+            detailsGrid.innerHTML = `
+                <div class="info-item">
+                    <div class="info-label">Patient ID</div>
+                    <div class="info-value">${patient.id}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Age</div>
+                    <div class="info-value">${patient.age} years</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Village</div>
+                    <div class="info-value">${patient.village}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Contact</div>
+                    <div class="info-value">${patient.contact}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Expected Delivery</div>
+                    <div class="info-value">${formatDate(patient.deliveryDate)}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Current Week</div>
+                    <div class="info-value">Week ${patient.week}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Blood Group</div>
+                    <div class="info-value">${patient.bloodGroup || 'Not Recorded'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Risk Level</div>
+                    <div class="info-value">${patient.riskLevel || 'Normal'}</div>
+                </div>
+                ${patient.riskReason ? `
+                <div class="info-item" style="grid-column: 1 / -1;">
+                    <div class="info-label">Risk Reason</div>
+                    <div class="info-value" style="font-size: 14px; font-weight: 400;">${patient.riskReason}</div>
+                </div>
+                ` : ''}
+                ${patient.notes ? `
+                <div class="info-item" style="grid-column: 1 / -1;">
+                    <div class="info-label">Notes</div>
+                    <div class="info-value" style="font-size: 14px; font-weight: 400;">${patient.notes}</div>
+                </div>
+                ` : ''}
+            `;
+
+            // Hide delete button for archived patients
+            const deleteBtn = document.getElementById('deletePatientBtn');
+            if (isArchived) {
+                deleteBtn.style.display = 'none';
+            } else {
+                deleteBtn.style.display = 'block';
+            }
+
+            closeModal('totalPatientsModal');
+            openModal('patientModal');
+        }
+
+        function deletePatient() {
+            if (!currentPatientId) return;
+           
+            if (confirm(translations[currentLanguage].confirmDelete)) {
+                db.archivePatient(currentPatientId);
+                closeModal('patientModal');
+                updateStats();
+                alert(translations[currentLanguage].patientDeleted);
+            }
+        }
+
+        function registerPatient(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+           
+            const patient = {
+                name: formData.get('name'),
+                age: parseInt(formData.get('age')),
+                village: formData.get('village'),
+                contact: formData.get('contact'),
+                deliveryDate: formData.get('deliveryDate'),
+                week: parseInt(formData.get('week')),
+                bloodGroup: formData.get('bloodGroup'),
+                riskLevel: formData.get('riskLevel'),
+                riskReason: formData.get('riskReason') || '',
+                notes: formData.get('notes')
+            };
+
+            const savedPatient = db.savePatient(patient);
+           
+            closeModal('registerModal');
+            event.target.reset();
+            document.getElementById('riskReasonGroup').style.display = 'none';
+           
+            updateStats();
+            updatePatientSelectors();
+           
+            alert(translations[currentLanguage].patientRegistered + '\nID: ' + savedPatient.id);
+            speak(translations[currentLanguage].patientRegistered, currentLanguage);
+        }
+
+        function toggleRiskReason(riskLevel) {
+            const riskReasonGroup = document.getElementById('riskReasonGroup');
+            const riskReasonInput = document.getElementById('riskReasonInput');
+           
+            if (riskLevel === 'high') {
+                riskReasonGroup.style.display = 'block';
+                riskReasonInput.required = true;
+            } else {
+                riskReasonGroup.style.display = 'none';
+                riskReasonInput.required = false;
+            }
+        }
+
+        // ==================== TASK MANAGEMENT ====================
+       
+        function renderTasks() {
+            const tasks = db.getTasks();
+            const patients = db.getPatients();
+           
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+           
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+           
+            const todayTasks = tasks.filter(task => {
+                const taskDate = new Date(task.date);
+                taskDate.setHours(0, 0, 0, 0);
+                return taskDate.getTime() === today.getTime();
+            });
+           
+            const tomorrowTasks = tasks.filter(task => {
+                const taskDate = new Date(task.date);
+                taskDate.setHours(0, 0, 0, 0);
+                return taskDate.getTime() === tomorrow.getTime();
+            });
+
+            // Sort by time (morning to evening)
+            const sortByTime = (a, b) => {
+                return new Date(a.date) - new Date(b.date);
+            };
+
+            todayTasks.sort(sortByTime);
+            tomorrowTasks.sort(sortByTime);
+
+            renderTaskList('todaysTasks', todayTasks, patients);
+            renderTaskList('tomorrowsTasks', tomorrowTasks, patients);
+        }
+
+        function renderTaskList(elementId, tasks, patients) {
+            const element = document.getElementById(elementId);
+           
+            if (tasks.length === 0) {
+                element.innerHTML = `<p style="color: var(--text-muted); font-size: 13px; padding: 10px;">${translations[currentLanguage].noTasks}</p>`;
+                return;
+            }
+
+            element.innerHTML = tasks.map(task => {
+                const patient = patients.find(p => p.id === task.patientId);
+                if (!patient) return '';
+               
+                const riskClass = patient.riskLevel === 'high' ? 'urgent' :
+                                 patient.riskLevel === 'moderate' ? 'due-soon' : 'normal';
+               
+                return `
+                    <div class="task-item ${riskClass}" onclick="showPatientDetails('${patient.id}')">
+                        <div class="task-name">${patient.name}</div>
+                        <div class="task-details">${task.type} - ${patient.village}</div>
+                        <div class="task-time">⏰ ${formatTime(task.date)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function scheduleCheckup(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+           
+            const task = {
+                patientId: formData.get('patientId'),
+                type: formData.get('checkupType'),
+                date: formData.get('checkupDate'),
+                notes: formData.get('notes')
+            };
+
+            db.saveTask(task);
+           
+            closeModal('scheduleModal');
+            event.target.reset();
+           
+            renderTasks();
+            updateStats();
+           
+            alert(translations[currentLanguage].checkupScheduled);
+            speak(translations[currentLanguage].checkupScheduled, currentLanguage);
+        }
+
+        function recordVaccination(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+           
+            const vaccination = {
+                patientId: formData.get('patientId'),
+                vaccineType: formData.get('vaccineType'),
+                date: formData.get('vaccinationDate'),
+                notes: formData.get('notes')
+            };
+
+            // Also create a task for the vaccination
+            const task = {
+                patientId: formData.get('patientId'),
+                type: 'vaccination',
+                date: formData.get('vaccinationDate'),
+                notes: formData.get('notes')
+            };
+
+            db.saveVaccination(vaccination);
+            db.saveTask(task);
+           
+            closeModal('vaccinationModal');
+            event.target.reset();
+           
+            renderTasks();
+            updateStats();
+           
+            alert(translations[currentLanguage].vaccinationRecorded);
+            speak(translations[currentLanguage].vaccinationRecorded, currentLanguage);
+        }
+
+        // ==================== STATISTICS ====================
+       
+        function updateStats() {
+            const patients = db.getPatients();
+            const tasks = db.getTasks();
+            const vaccinations = db.getVaccinations();
+           
+            // Total patients
+            document.getElementById('totalPatients').textContent = patients.length;
+           
+            // Update counts in modal
+            const archived = db.getArchivedPatients();
+            document.getElementById('activeCount').textContent = patients.length;
+            document.getElementById('archivedCount').textContent = archived.length;
+           
+            // Due this week
+            const weekFromNow = new Date();
+            weekFromNow.setDate(weekFromNow.getDate() + 7);
+            const dueThisWeek = tasks.filter(task => {
+                const taskDate = new Date(task.date);
+                return taskDate <= weekFromNow && taskDate >= new Date();
+            }).length;
+            document.getElementById('dueThisWeek').textContent = dueThisWeek;
+           
+            // Vaccinations done
+            document.getElementById('vaccinationsDone').textContent = vaccinations.length;
+           
+            // High risk cases
+            const highRisk = patients.filter(p => p.riskLevel === 'high').length;
+            document.getElementById('highRiskCases').textContent = highRisk;
+        }
+
+        // ==================== TOTAL PATIENTS VIEW ====================
+       
+        function openTotalPatientsView() {
+            currentView = 'active';
+            document.getElementById('activeView').classList.add('active');
+            document.getElementById('archivedView').classList.remove('active');
+            renderModalPatients();
+            openModal('totalPatientsModal');
+        }
+
+        function switchView(view) {
+            currentView = view;
+           
+            if (view === 'active') {
+                document.getElementById('activeView').classList.add('active');
+                document.getElementById('archivedView').classList.remove('active');
+            } else {
+                document.getElementById('activeView').classList.remove('active');
+                document.getElementById('archivedView').classList.add('active');
+            }
+           
+            renderModalPatients();
+        }
+
+        // ==================== REPORT GENERATION ====================
+       
+        function openReportModal() {
+            openModal('reportModal');
+            document.getElementById('reportContent').innerHTML = '';
+            document.getElementById('reportSearchInput').value = '';
+        }
+
+        function searchPatientForReport(query) {
+            const resultsContainer = document.getElementById('reportSearchResults');
+           
+            if (query.length < 2) {
+                resultsContainer.classList.remove('active');
+                return;
+            }
+           
+            const patients = db.getPatients();
+            const filtered = patients.filter(p =>
+                p.name.toLowerCase().includes(query.toLowerCase()) ||
+                p.id.toLowerCase().includes(query.toLowerCase())
+            );
+           
+            if (filtered.length === 0) {
+                resultsContainer.innerHTML = `<div class="search-result-item">${translations[currentLanguage].noResults}</div>`;
+                resultsContainer.classList.add('active');
+                return;
+            }
+           
+            resultsContainer.innerHTML = filtered.map(patient => `
+                <div class="search-result-item" onclick="generatePatientReport('${patient.id}')">
+                    <strong>${patient.name}</strong> - ${patient.id}
+                </div>
+            `).join('');
+            resultsContainer.classList.add('active');
+        }
+
+        function generatePatientReport(patientId) {
+            const patients = db.getPatients();
+            const patient = patients.find(p => p.id === patientId);
+           
+            if (!patient) return;
+           
+            const tasks = db.getTasks().filter(t => t.patientId === patientId);
+            const vaccinations = db.getVaccinations().filter(v => v.patientId === patientId);
+           
+            const reportContent = document.getElementById('reportContent');
+            document.getElementById('reportSearchResults').classList.remove('active');
+           
+            reportContent.innerHTML = `
+                <div class="report-container">
+                    <h2 style="margin-bottom: 20px;">${patient.name} - ${patient.id}</h2>
+                   
+                    <div class="report-section">
+                        <h3>Patient Information</h3>
+                        <div class="report-item">
+                            <span class="report-label">Age:</span>
+                            <span class="report-value">${patient.age} years</span>
+                        </div>
+                        <div class="report-item">
+                            <span class="report-label">Village:</span>
+                            <span class="report-value">${patient.village}</span>
+                        </div>
+                        <div class="report-item">
+                            <span class="report-label">Contact:</span>
+                            <span class="report-value">${patient.contact}</span>
+                        </div>
+                        <div class="report-item">
+                            <span class="report-label">Blood Group:</span>
+                            <span class="report-value">${patient.bloodGroup || 'Not Recorded'}</span>
+                        </div>
+                        <div class="report-item">
+                            <span class="report-label">Current Week:</span>
+                            <span class="report-value">Week ${patient.week}</span>
+                        </div>
+                        <div class="report-item">
+                            <span class="report-label">Expected Delivery:</span>
+                            <span class="report-value">${formatDate(patient.deliveryDate)}</span>
+                        </div>
+                        <div class="report-item">
+                            <span class="report-label">Risk Level:</span>
+                            <span class="report-value">${patient.riskLevel || 'Normal'}</span>
+                        </div>
+                        ${patient.riskReason ? `
+                        <div class="report-item">
+                            <span class="report-label">Risk Reason:</span>
+                            <span class="report-value">${patient.riskReason}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                   
+                    <div class="report-section">
+                        <h3>Checkup History (${tasks.length})</h3>
+                        ${tasks.length === 0 ?
+                            '<p style="color: var(--text-muted); font-size: 14px;">No checkups scheduled</p>' :
+                            tasks.map(task => `
+                                <div class="report-item">
+                                    <span class="report-label">${formatDateTime(task.date)}</span>
+                                    <span class="report-value">${task.type}</span>
+                                </div>
+                            `).join('')
+                        }
+                    </div>
+                   
+                    <div class="report-section">
+                        <h3>Vaccination History (${vaccinations.length})</h3>
+                        ${vaccinations.length === 0 ?
+                            '<p style="color: var(--text-muted); font-size: 14px;">No vaccinations recorded</p>' :
+                            vaccinations.map(vac => `
+                                <div class="report-item">
+                                    <span class="report-label">${formatDateTime(vac.date)}</span>
+                                    <span class="report-value">${vac.vaccineType}</span>
+                                </div>
+                            `).join('')
+                        }
+                    </div>
+                   
+                    ${patient.notes ? `
+                    <div class="report-section">
+                        <h3>Notes</h3>
+                        <p style="color: var(--text-dark);">${patient.notes}</p>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // ==================== SEARCH ====================
+       
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+           
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+               
+                if (searchTerm.length < 2) {
+                    searchResults.classList.remove('active');
+                    return;
+                }
+               
+                const patients = db.getPatients();
+                const filtered = patients.filter(patient =>
+                    patient.name.toLowerCase().includes(searchTerm) ||
+                    patient.id.toLowerCase().includes(searchTerm) ||
+                    patient.village.toLowerCase().includes(searchTerm)
+                );
+               
+                if (filtered.length === 0) {
+                    searchResults.innerHTML = `<div class="search-result-item">${translations[currentLanguage].noResults}</div>`;
+                    searchResults.classList.add('active');
+                    return;
+                }
+               
+                searchResults.innerHTML = filtered.map(patient => `
+                    <div class="search-result-item" onclick="showPatientDetails('${patient.id}')">
+                        <strong>${patient.name}</strong> - ${patient.id} - ${patient.village}
+                    </div>
+                `).join('');
+                searchResults.classList.add('active');
+            });
+           
+            // Close search results when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.classList.remove('active');
+                }
+            });
+        }
+
+        // ==================== UI HELPERS ====================
+       
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function openRegisterModal() {
+            openModal('registerModal');
+        }
+
+        function openScheduleModal() {
+            updatePatientSelectors();
+            openModal('scheduleModal');
+        }
+
+        function openVaccinationModal() {
+            updatePatientSelectors();
+            openModal('vaccinationModal');
+        }
+
+        function updatePatientSelectors() {
+            const patients = db.getPatients();
+            const options = patients.map(p =>
+                `<option value="${p.id}">${p.name} (${p.id})</option>`
+            ).join('');
+           
+            const selectPatientText = currentLanguage === 'hi' ? 'रोगी चुनें...' :
+                                     currentLanguage === 'te' ? 'రోగిని ఎంచుకోండి...' :
+                                     'Select a patient...';
+           
+            document.getElementById('schedulePatientSelect').innerHTML =
+                `<option value="">${selectPatientText}</option>` + options;
+            document.getElementById('vaccinationPatientSelect').innerHTML =
+                `<option value="">${selectPatientText}</option>` + options;
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+       
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function formatTime(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleTimeString('en-IN', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function formatDateTime(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('en-IN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Close modals on outside click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal(modal.id);
+                }
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(modal => {
+                    closeModal(modal.id);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
